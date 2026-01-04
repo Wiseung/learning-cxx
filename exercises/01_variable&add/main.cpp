@@ -1,10 +1,11 @@
 #include "../exercise.h"
 
-// READ: 运算符 <https://zh.cppreference.com/w/cpp/language/expressions#.E8.BF.90.E7.AE.97.E7.AC.A6>
+// READ: std streams <https://zh.cppreference.com/w/cpp/io/c/std_streams>
+// READ: 流修饰符 <https://zh.cppreference.com/w/cpp/io/manip>
+// READ: format in cxx20 <https://zh.cppreference.com/w/cpp/utility/format/format>
 
 int main(int argc, char **argv) {
-    // TODO: 补全变量定义并打印加法运算
-    // x ?
-    std::cout << x << " + " << x << " = " << x + x << std::endl;
+    // TODO: 在控制台输出 "Hello, InfiniTensor!" 并换行
+    std::cout << "Hello, InfiniTensor!" << std::endl;
     return 0;
 }

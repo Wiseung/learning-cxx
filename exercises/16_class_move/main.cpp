@@ -11,26 +11,64 @@
 
 class DynFibonacci {
     size_t *cache;
-    int cached;
+    int capacity;
+    int cached; // 语义：已缓存的最大下标（例如 cached==1 表示 cache[0..1] 都可用）
 
 public:
-    // TODO: 实现动态设置容量的构造器
-    DynFibonacci(int capacity): cache(new ?), cached(?) {}
+    // 实现动态设置容量的构造器
+    DynFibonacci(int capacity_)
+        : cache(nullptr), capacity(capacity_), cached(0) {
+        ASSERT(capacity > 0, "capacity must be positive");
 
-    // TODO: 实现移动构造器
-    DynFibonacci(DynFibonacci &&) noexcept = delete;
+        cache = new size_t[capacity]();
+        cache[0] = 0;
 
-    // TODO: 实现移动赋值
+        if (capacity > 1) {
+            cache[1] = 1;
+            cached = 1;
+        } else {
+            cached = 0;
+        }
+    }
+
+    // 实现移动构造器
+    DynFibonacci(DynFibonacci &&other) noexcept
+        : cache(other.cache), capacity(other.capacity), cached(other.cached) {
+        other.cache = nullptr;
+        other.capacity = 0;
+        other.cached = 0;
+    }
+
+    // 实现移动赋值
     // NOTICE: ⚠ 注意移动到自身问题 ⚠
-    DynFibonacci &operator=(DynFibonacci &&) noexcept = delete;
+    DynFibonacci &operator=(DynFibonacci &&other) noexcept {
+        if (this != &other) {
+            delete[] cache;
 
-    // TODO: 实现析构器，释放缓存空间
-    ~DynFibonacci();
+            cache = other.cache;
+            capacity = other.capacity;
+            cached = other.cached;
 
-    // TODO: 实现正确的缓存优化斐波那契计算
+            other.cache = nullptr;
+            other.capacity = 0;
+            other.cached = 0;
+        }
+        return *this;
+    }
+
+    // 实现析构器，释放缓存空间
+    ~DynFibonacci() {
+        delete[] cache;
+    }
+
+    // 实现正确的缓存优化斐波那契计算
     size_t operator[](int i) {
-        for (; false; ++cached) {
-            cache[cached] = cache[cached - 1] + cache[cached - 2];
+        ASSERT(i >= 0 && i < capacity, "i out of range");
+
+        while (cached < i) {
+            int next = cached + 1;
+            cache[next] = cache[next - 1] + cache[next - 2];
+            cached = next;
         }
         return cache[i];
     }

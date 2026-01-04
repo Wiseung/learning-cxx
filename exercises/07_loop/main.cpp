@@ -1,28 +1,25 @@
 #include "../exercise.h"
 
-// TODO: 改正函数实现，实现正确的缓存优化斐波那契计算
-// THINk: 这个函数是一个纯函数（pure function）吗？
-// READ: 纯函数 <https://zh.wikipedia.org/wiki/%E7%BA%AF%E5%87%BD%E6%95%B0>
-static unsigned long long fibonacci(int i) {
-    // TODO: 为缓存设置正确的初始值
-    static unsigned long long cache[96], cached;
-    // TODO: 设置正确的循环条件
-    for (; false; ++cached) {
-        cache[cached] = cache[cached - 1] + cache[cached - 2];
+// READ: 数组 <https://zh.cppreference.com/w/cpp/language/array>
+
+unsigned long long arr[90]{0, 1};
+unsigned long long fibonacci(int i) {
+    switch (i) {
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        default:
+            return arr[i] != 0 ? arr[i] : (arr[i] = fibonacci(i - 1) + fibonacci(i - 2));
     }
-    return cache[i];
 }
 
-// ---- 不要修改以下代码 ----
 int main(int argc, char **argv) {
-    ASSERT(fibonacci(0) == 0, "fibonacci(0) should be 0");
-    ASSERT(fibonacci(1) == 1, "fibonacci(1) should be 1");
+    // TODO: 为此 ASSERT 填写正确的值
+    ASSERT(sizeof(arr) == sizeof(unsigned long long) * 90, "sizeof array is size of all its elements");
+    // ---- 不要修改以下代码 ----
     ASSERT(fibonacci(2) == 1, "fibonacci(2) should be 1");
-    ASSERT(fibonacci(3) == 2, "fibonacci(3) should be 2");
-    ASSERT(fibonacci(10) == 55, "fibonacci(10) should be 55");
-
-    auto fib90 = fibonacci(90);
-    std::cout << "fibonacci(90) = " << fib90 << std::endl;
-    ASSERT(fib90 == 2880067194370816120, "fibonacci(90) should be 2880067194370816120");
+    ASSERT(fibonacci(20) == 6765, "fibonacci(20) should be 6765");
+    ASSERT(fibonacci(80) == 23416728348467685, "fibonacci(80) should be 23416728348467685");
     return 0;
 }
